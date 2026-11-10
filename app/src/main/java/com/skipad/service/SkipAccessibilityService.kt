@@ -285,7 +285,7 @@ class SkipAccessibilityService : AccessibilityService() {
             }
             if (ownRoots.isEmpty()) return
 
-        val nodes = buildSnapshot(ownRoots)
+            val nodes = buildSnapshot(ownRoots)
             if (nodes.isEmpty()) return
 
             val screenWidth = resources.displayMetrics.widthPixels
