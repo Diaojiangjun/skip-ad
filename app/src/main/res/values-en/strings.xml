@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      English locale.
+      Keep app_name and accessibility_service_label identical so the launcher icon,
+      the recents card and the system Accessibility service list all show one name.
+    -->
+    <string name="app_name">SkipAd</string>
+    <string name="tile_label">SkipAd</string>
+    <string name="notification_title">Ad blocking is on</string>
+    <string name="notification_text">Your network is protected — ad requests are being blocked</string>
+    <string name="notification_channel_name">Status</string>
+    <string name="notification_channel_desc">Shows the status of the ad blocking service</string>
+    <string name="notification_channel_silent_name">Status (silent)</string>
+    <string name="accessibility_service_label">SkipAd</string>
+    <string name="accessibility_service_desc">Detects and taps the \"Skip\" button on app splash ads. Runs only after you enable it, and every match is logged in the app for review.</string>
+</resources>

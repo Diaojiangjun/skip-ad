@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      默认语言：简体中文。英文系统走 values-en。
+
+      注意：app_name 与 accessibility_service_label 必须保持一致 ——
+      桌面图标、最近任务、系统设置里的无障碍服务列表都用这两个名字，
+      用户是靠名字认出「这是同一个应用」的，不一致会让人以为装了两个东西。
+    -->
+    <string name="app_name">净广告</string>
+    <string name="tile_label">净广告</string>
+    <string name="notification_title">广告拦截已开启</string>
+    <string name="notification_text">正在保护你的网络，广告请求将被拦截</string>
+    <string name="notification_channel_name">运行状态</string>
+    <string name="notification_channel_desc">显示广告拦截服务的运行状态</string>
+    <string name="notification_channel_silent_name">运行状态（静默）</string>
+    <string name="accessibility_service_label">净广告</string>
+    <string name="accessibility_service_desc">自动识别并点击应用开屏广告的「跳过」按钮。仅在你主动开启后生效，所有匹配记录都会在应用内留痕以便核查。</string>
+</resources>
