@@ -11,6 +11,7 @@
 from pathlib import Path
 import base64
 import re
+from html import escape
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -54,6 +55,14 @@ body[data-ratio="4x3"]{--W:1200px;--H:900px;--u:1.045;--dy:64px}
 #naming td{border-top:1px solid #E4E6E3;padding:14px 14px 14px 0;color:#5F646B;vertical-align:top}
 #naming td b{color:#15171A;font-size:17px;font-weight:700;display:block;margin-bottom:4px}
 #naming code{font-family:var(--mono);font-size:12px;color:#12864B}
+#naming .sec{margin:0 0 16px;font-size:13px;letter-spacing:.22em;color:#12864B;font-family:var(--mono);font-weight:600}
+#naming .sec.first{margin-top:44px}
+#naming pre{white-space:pre-wrap;word-break:break-word;font-family:var(--sans);font-size:14px;line-height:1.95;color:#3C4248;background:#fff;border:1px solid #E4E6E3;border-radius:6px;padding:24px 26px;margin:0 0 14px}
+#naming .copy{border:1px solid #12864B;background:#12864B;color:#fff;border-radius:999px;padding:9px 22px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;cursor:pointer}
+#naming .copy.done{background:#fff;color:#12864B}
+#naming .meta{font-size:14px;color:#5F646B;line-height:2.1;border-top:1px solid #E4E6E3;margin-top:34px;padding-top:18px}
+#naming .meta b{color:#15171A;font-weight:600}
+#naming .short{font-size:15px;color:#3C4248;line-height:1.9;background:#fff;border-left:3px solid #12864B;padding:16px 20px;margin:0}
 #switch{max-width:1146px;margin:0 auto 26px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:#9BA0A6}
 #switch button{border:1px solid #E4E6E3;background:#fff;color:#5F646B;border-radius:999px;padding:8px 18px;font:inherit;cursor:pointer}
 #switch button.on{background:#12864B;border-color:#12864B;color:#fff}
@@ -79,6 +88,18 @@ NAMING_HTML = """
     <tr><td><b>暗夜绿</b></td><td>信息流版，深色高对比，缩略图最醒目（推荐）</td><td>不用 Root / 也能去广告</td><td><code>cover-2-dark</code></td></tr>
     <tr><td><b>双擎</b></td><td>技术向版，双引擎原理图 + 四栏数据</td><td>双引擎 / 干掉广告</td><td><code>cover-3-engine</code></td></tr>
   </table>
+
+  <h2 class="sec first">VIDEO DESCRIPTION / 投稿简介</h2>
+  <pre id="desc">__DESCRIPTION__</pre>
+  <button class="copy" id="btn-copy">复制简介</button>
+  <div class="meta">
+    <b>推荐分区</b>：科技 → 软件应用（或 计算机技术）<br>
+    <b>推荐标签</b>：Android / 去广告 / 开源 / Kotlin / SkipAd / 净广告 / 免Root / DNS / 无障碍 / Jetpack Compose<br>
+    <b>建议置顶评论</b>：安装包在 Releases 里，源码与构建说明都在 GitHub；遇到拦不住的广告，欢迎带 App 名称和场景留言。
+  </div>
+
+  <h2 class="sec first">SHORT BLURB / 短版项目简介</h2>
+  <p class="short">净广告 SkipAd 是一款免 Root 的 Android 去广告应用：用 DNS 拦截广告域名，用无障碍自动跳过开屏广告。纯 Kotlin 开源实现，1.5MB 安装包，GPL-3.0 完全免费。</p>
 </div>
 <div id="switch"><span>预览比例</span>
   <button data-r="16x10">16:10 · 1146×717</button>
@@ -107,6 +128,29 @@ RATIO_SCRIPT = """<script>
       });
       b.classList.add('on');
     });
+  });
+  var copyBtn = document.getElementById('btn-copy');
+  if (copyBtn) copyBtn.addEventListener('click', function () {
+    var txt = document.getElementById('desc').textContent;
+    function done() {
+      copyBtn.textContent = '已复制';
+      copyBtn.classList.add('done');
+      setTimeout(function () {
+        copyBtn.textContent = '复制简介';
+        copyBtn.classList.remove('done');
+      }, 1800);
+    }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = txt;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, fallback);
+    } else { fallback(); }
   });
 </script>"""
 
@@ -141,10 +185,14 @@ def main():
     out.write_text(html, encoding="utf-8")
     print(f"生成 {out.name}  ({out.stat().st_size / 1024:.0f} KB)")
 
+    desc = (HERE / "bilibili-description.txt").read_text(encoding="utf-8").rstrip("\n")
     ratios = scale_css((HERE / "template.html").read_text(encoding="utf-8"))
     for token, path in SHOTS.items():
         data = "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode("ascii")
         ratios = ratios.replace(token, data)
+    ratios = ratios.replace("__DESCRIPTION__", escape(desc))
+    if "__DESCRIPTION__" in ratios or "__IMG_" in ratios:
+        raise SystemExit("占位符未全部替换")
     out2 = HERE / "cover-ratios.html"
     out2.write_text(ratios, encoding="utf-8")
     print(f"生成 {out2.name}  ({out2.stat().st_size / 1024:.0f} KB)")
