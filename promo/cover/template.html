@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>净广告 SkipAd · B 站视频封面</title>
+<style>
+  :root{
+    --bg:#FBFBFA;
+    --ink:#15171A;
+    --ink2:#5F646B;
+    --ink3:#9BA0A6;
+    --line:#E4E6E3;
+    --accent:#12864B;
+    --mono:Consolas,"SFMono-Regular","Liberation Mono",Menlo,monospace;
+    --sans:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC","Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#E9EBE8;font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:30px 0 60px}
+  .wrap{width:1146px;margin:0 auto 44px}
+  .label{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:#6E7570;margin:0 0 10px 4px}
+  .cover{position:relative;width:1146px;height:717px;overflow:hidden;background:var(--bg);color:var(--ink)}
+  .topbar{position:absolute;top:38px;left:64px;right:64px;height:44px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;letter-spacing:.14em}
+  .brand svg{width:21px;height:22px;fill:none;stroke:var(--accent);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+  .tb-right{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ink3)}
+  .foot{position:absolute;bottom:28px;left:64px;right:64px;border-top:1px solid var(--line);padding-top:15px;text-align:center;font-size:13px;letter-spacing:.1em;color:var(--ink3)}
+  .kicker{font-family:var(--mono);font-size:13px;letter-spacing:.3em;color:var(--accent)}
+  .pill{border:1px solid var(--line);border-radius:999px;padding:9px 17px;font-size:14px;color:var(--ink2);background:#fff;white-space:nowrap}
+  .pill b{color:var(--ink);font-weight:700}
+
+  /* ---------- 变体 1：极简白（与 App / 宣传片同一套视觉语言） ---------- */
+  .v1 .left{position:absolute;left:64px;top:140px;width:650px}
+  .v1 h1{font-size:116px;line-height:1.06;font-weight:700;letter-spacing:.03em;margin-top:16px}
+  .v1 .en{font-family:var(--mono);font-size:19px;letter-spacing:.52em;color:var(--ink3);margin-top:4px}
+  .v1 .bar{width:58px;height:3px;background:var(--accent);margin-top:30px}
+  .v1 h2{font-size:33px;font-weight:600;letter-spacing:.03em;margin-top:24px}
+  .v1 .sub{font-size:20px;color:var(--ink2);margin-top:12px;letter-spacing:.02em}
+  .v1 .pills{display:flex;gap:12px;margin-top:34px}
+  .v1 .right{position:absolute;right:86px;top:96px;width:256px;height:570px}
+  .v1 .halo{position:absolute;width:430px;height:430px;border-radius:50%;background:#F1F5F1;left:-90px;top:62px}
+  .v1 .ghost{position:absolute;width:300px;height:315px;left:-22px;top:120px;opacity:.42}
+  .v1 .ghost path{stroke:#CFDCD2}
+  .v1 .frame{position:absolute;left:0;top:0;width:256px;height:570px;overflow:hidden;border-radius:18px;border:1px solid #DFE3DE;background:#fff;box-shadow:0 24px 58px rgba(20,30,24,.14)}
+  .v1 .frame img{width:256px;height:auto;display:block;margin-top:-15.9px}
+
+  /* ---------- 变体 2：深色高对比（B 站信息流更醒目） ---------- */
+  .v2{background:#101713;color:#F5F8F5}
+  .v2 .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);background-size:56px 56px}
+  .v2 .topbar{border-bottom-color:rgba(255,255,255,.13)}
+  .v2 .brand svg{stroke:#5BD693}
+  .v2 .tb-right,.v2 .foot{color:#7E8B82}
+  .v2 .foot{border-top-color:rgba(255,255,255,.13)}
+  .v2 .left{position:absolute;left:64px;top:132px;width:630px;z-index:2}
+  .v2 .kicker{color:#5BD693;font-size:13px}
+  .v2 h1{font-size:86px;line-height:1.16;font-weight:700;letter-spacing:.02em;margin-top:20px;color:#fff}
+  .v2 h1 em{font-style:normal;color:#5BD693}
+  .v2 .sub{font-size:21px;color:#AEBBB1;margin-top:20px;letter-spacing:.03em}
+  .v2 .stats{display:flex;gap:44px;margin-top:46px}
+  .v2 .stat b{display:block;font-family:var(--mono);font-size:36px;font-weight:600;color:#fff;letter-spacing:-.02em}
+  .v2 .stat span{display:block;font-size:13px;color:#849188;margin-top:7px;letter-spacing:.1em}
+  .v2 .badge{position:absolute;top:100px;right:64px;border:1px solid rgba(91,214,147,.55);color:#5BD693;border-radius:999px;padding:9px 20px;font-size:14px;letter-spacing:.12em;z-index:3}
+  .v2 .p1,.v2 .p2{position:absolute;width:198px;height:440px;overflow:hidden;border-radius:15px;border:1px solid rgba(255,255,255,.22);box-shadow:0 26px 60px rgba(0,0,0,.46)}
+  .v2 .p1{left:704px;top:146px;z-index:2}
+  .v2 .p2{left:892px;top:210px;z-index:3}
+  .v2 .p1 img,.v2 .p2 img{width:198px;height:auto;display:block;margin-top:-12.3px}
+
+  /* ---------- 变体 3：双引擎原理图（代码绘制的科技氛围） ---------- */
+  .v3{background:#F4F7F3}
+  .v3 .mesh{position:absolute;inset:0;background-image:radial-gradient(#D6E2D8 1px,transparent 1px);background-size:26px 26px;opacity:.7}
+  .v3 .left{position:absolute;left:64px;top:142px;width:560px;z-index:2}
+  .v3 h1{font-size:74px;line-height:1.2;font-weight:700;letter-spacing:.02em;margin-top:18px}
+  .v3 h1 em{font-style:normal;color:var(--accent)}
+  .v3 .sub{font-size:20px;color:var(--ink2);margin-top:18px;line-height:1.85;letter-spacing:.02em}
+  .v3 .engines{display:flex;gap:40px;margin-top:38px}
+  .v3 .eng{border-left:3px solid var(--accent);padding-left:16px}
+  .v3 .eng b{display:block;font-size:19px;font-weight:600}
+  .v3 .eng span{display:block;font-size:14px;color:var(--ink2);margin-top:7px;letter-spacing:.02em}
+  .v3 .right{position:absolute;right:54px;top:92px;width:452px;height:440px;z-index:2}
+  .v3 .right svg{width:452px;height:440px;overflow:visible}
+  .v3 .tag{position:absolute;font-family:var(--mono);font-size:13px;letter-spacing:.06em;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px 13px;color:var(--ink2);white-space:nowrap}
+  .v3 .tag-a{left:0;top:82px}
+  .v3 .tag-b{left:0;top:398px}
+  .v3 .metrics{position:absolute;bottom:76px;left:64px;right:64px;height:74px;display:flex;border-top:1px solid var(--line);border-bottom:1px solid var(--line);z-index:2}
+  .v3 .metrics .m{flex:1;display:flex;flex-direction:column;justify-content:center;padding-left:26px;border-right:1px solid var(--line)}
+  .v3 .metrics .m:last-child{border-right:0}
+  .v3 .metrics b{font-family:var(--mono);font-size:29px;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+  .v3 .metrics span{font-size:12px;color:var(--ink3);margin-top:3px;letter-spacing:.1em}
+
+  /* ---------- 导出模式：只显示指定变体，画布精确 1146x717 ---------- */
+  body.export{padding:0;margin:0;background:none;overflow:hidden}
+  body.export .wrap{display:none;margin:0}
+  body.export .wrap.active{display:block}
+  body.export .label{display:none}
+</style>
+</head>
+<body>
+
+<!-- ==================== 变体 1 ==================== -->
+<div class="wrap" data-v="1">
+  <div class="label">01 / 极简白 · 品牌一致</div>
+  <section class="cover v1">
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24"><path d="M12 2 4 5.4v6.1c0 5 3.5 9.5 8 10.5 4.5-1 8-5.5 8-10.5V5.4L12 2Z"/><path d="m8.6 11.9 2.3 2.3 4.5-4.5"/></svg>
+        <span>SkipAd / 净广告</span>
+      </div>
+      <div class="tb-right">GITHUB · Diaojiangjun / skip-ad</div>
+    </div>
+
+    <div class="left">
+      <div class="kicker">OPEN SOURCE · ANDROID</div>
+      <h1>净广告</h1>
+      <div class="en">SKIPAD</div>
+      <div class="bar"></div>
+      <h2>无需 Root 的广告拦截</h2>
+      <div class="sub">DNS 拦截 + 无障碍跳过 · 双引擎互补</div>
+      <div class="pills">
+        <div class="pill"><b>27.8 万</b> 条规则</div>
+        <div class="pill"><b>204</b> 项单测</div>
+        <div class="pill"><b>0</b> Root 权限</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="halo"></div>
+      <svg class="ghost" viewBox="0 0 120 126" fill="none"><path d="M60 8 12 26v34c0 28 21 50 48 58 27-8 48-30 48-58V26L60 8Z" stroke-width="2"/><path d="m38 60 16 16 30-32" stroke-width="2"/></svg>
+      <div class="frame"><img src="__IMG_DASH__" alt="净广告概览页"></div>
+    </div>
+
+    <div class="foot">github.com/Diaojiangjun/skip-ad　·　GPL-3.0 开源免费　·　40 秒看懂双引擎</div>
+  </section>
+</div>
+
+<!-- ==================== 变体 2 ==================== -->
+<div class="wrap" data-v="2">
+  <div class="label">02 / 深色高对比 · 信息流醒目</div>
+  <section class="cover v2">
+    <div class="grid"></div>
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24"><path d="M12 2 4 5.4v6.1c0 5 3.5 9.5 8 10.5 4.5-1 8-5.5 8-10.5V5.4L12 2Z"/><path d="m8.6 11.9 2.3 2.3 4.5-4.5"/></svg>
+        <span>SkipAd / 净广告</span>
+      </div>
+      <div class="tb-right">ANDROID 8.0+ · NO ROOT</div>
+    </div>
+    <div class="badge">开源 · 免费</div>
+
+    <div class="left">
+      <div class="kicker">ANDROID · 双引擎去广告</div>
+      <h1>不用 Root<br><em>也能去广告</em></h1>
+      <div class="sub">DNS 拦截广告域名　·　自动跳过开屏广告</div>
+      <div class="stats">
+        <div class="stat"><b>27.8万</b><span>拦截规则</span></div>
+        <div class="stat"><b>204</b><span>单元测试</span></div>
+        <div class="stat"><b>1.5MB</b><span>安装包体积</span></div>
+      </div>
+    </div>
+
+    <div class="p1"><img src="__IMG_DASH__" alt="净广告概览页"></div>
+    <div class="p2"><img src="__IMG_SKIP__" alt="净广告应用跳过页"></div>
+
+    <div class="foot">github.com/Diaojiangjun/skip-ad　·　纯 Kotlin 开源实现</div>
+  </section>
+</div>
+
+<!-- ==================== 变体 3 ==================== -->
+<div class="wrap" data-v="3">
+  <div class="label">03 / 双引擎原理 · 技术向</div>
+  <section class="cover v3">
+    <div class="mesh"></div>
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24"><path d="M12 2 4 5.4v6.1c0 5 3.5 9.5 8 10.5 4.5-1 8-5.5 8-10.5V5.4L12 2Z"/><path d="m8.6 11.9 2.3 2.3 4.5-4.5"/></svg>
+        <span>SkipAd / 净广告</span>
+      </div>
+      <div class="tb-right">DNS ENGINE + ACCESSIBILITY ENGINE</div>
+    </div>
+
+    <div class="left">
+      <div class="kicker">NO ROOT · PURE KOTLIN</div>
+      <h1>双引擎<br><em>干掉广告</em></h1>
+      <div class="sub">只接管 DNS 流量，不实现完整协议栈<br>配合无障碍手势，覆盖两类广告盲区</div>
+      <div class="engines">
+        <div class="eng"><b>01 / DNS 引擎</b><span>广告域名 → 0.0.0.0</span></div>
+        <div class="eng"><b>02 / 无障碍引擎</b><span>识别「跳过」→ 自动点击</span></div>
+      </div>
+    </div>
+
+    <div class="right">
+      <svg viewBox="0 0 452 470" fill="none">
+        <!-- 三路广告请求 -->
+        <path d="M18 96 H150" stroke="#C9D6CB" stroke-width="1.6" stroke-dasharray="5 7"/>
+        <path d="M18 235 H150" stroke="#C9D6CB" stroke-width="1.6" stroke-dasharray="5 7"/>
+        <path d="M18 374 H150" stroke="#C9D6CB" stroke-width="1.6" stroke-dasharray="5 7"/>
+        <circle cx="18" cy="96" r="5" fill="#B6C2B8"/>
+        <circle cx="18" cy="235" r="5" fill="#B6C2B8"/>
+        <circle cx="18" cy="374" r="5" fill="#B6C2B8"/>
+        <circle cx="58" cy="96" r="3" fill="#D3DDD5"/>
+        <circle cx="96" cy="235" r="3" fill="#D3DDD5"/>
+        <circle cx="72" cy="374" r="3" fill="#D3DDD5"/>
+        <!-- 拦截标记 -->
+        <g stroke="#12864B" stroke-width="2" stroke-linecap="round">
+          <path d="m132 88 12 16 M144 88 132 104"/>
+          <path d="m132 227 12 16 M144 227 132 243"/>
+          <path d="m132 366 12 16 M144 366 132 382"/>
+        </g>
+        <!-- 汇聚线 -->
+        <path d="M160 96 C205 96 205 190 245 208" stroke="#12864B" stroke-width="1.6" opacity=".55"/>
+        <path d="M160 235 H245" stroke="#12864B" stroke-width="1.6" opacity=".55"/>
+        <path d="M160 374 C205 374 205 280 245 262" stroke="#12864B" stroke-width="1.6" opacity=".55"/>
+        <!-- 主盾牌 -->
+        <circle cx="306" cy="235" r="132" stroke="#DDE9DF" stroke-width="1" stroke-dasharray="3 8"/>
+        <circle cx="306" cy="235" r="104" fill="#FFFFFF" stroke="#E1EBE3" stroke-width="1"/>
+        <path d="M306 148 258 167v42c0 34 25 61 48 70 23-9 48-36 48-70v-42l-48-19Z" stroke="#12864B" stroke-width="4" stroke-linejoin="round"/>
+        <path d="m282 234 17 17 32-35" stroke="#12864B" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- 输出 -->
+        <g fill="#12864B"><circle cx="412" cy="196" r="4"/><circle cx="430" cy="235" r="3"/><circle cx="412" cy="274" r="4"/></g>
+        <path d="M354 210 C382 210 382 196 402 196 M354 235 H420 M354 260 C382 260 382 274 402 274" stroke="#12864B" stroke-width="1.6" opacity=".55"/>
+      </svg>
+      <div class="tag tag-a">ad.example.com → 0.0.0.0</div>
+      <div class="tag tag-b">[ 跳过 ] → dispatchGesture</div>
+    </div>
+
+    <div class="metrics">
+      <div class="m"><b>27.8万</b><span>拦截规则</span></div>
+      <div class="m"><b>204</b><span>单元测试</span></div>
+      <div class="m"><b>1.5MB</b><span>安装包</span></div>
+      <div class="m"><b>0</b><span>ROOT 权限</span></div>
+    </div>
+
+    <div class="foot">github.com/Diaojiangjun/skip-ad　·　GPL-3.0 开源免费</div>
+  </section>
+</div>
+
+<script>
+  var q = new URLSearchParams(location.search);
+  if (q.get('export') === '1') {
+    document.body.classList.add('export');
+    var v = q.get('v') || '1';
+    Array.prototype.forEach.call(document.querySelectorAll('.wrap'), function (w) {
+      w.classList.toggle('active', w.getAttribute('data-v') === v);
+    });
+  }
+</script>
+</body>
+</html>
